@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Tharavad AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --forest: #133215;
+            --sage: #92B775;
+            --cream: #F3E8D3;
+            --sage-light: #a8c98e;
+            --forest-dark: #0a1f0c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: var(--cream);
+            color: var(--forest);
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            border-bottom: 2px solid var(--sage);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(19, 50, 21, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--forest);
+            text-decoration: none;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.6rem 1.2rem;
+            background: var(--cream);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-profile:hover {
+            background: var(--sage);
+            transform: translateY(-2px);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--sage);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-weight: 600;
+            color: white;
+        }
+
+        .user-name {
+            font-family: 'Syne', sans-serif;
+            font-weight: 600;
+            color: var(--forest);
+        }
+
+        .logout-btn {
+            padding: 0.6rem 1.5rem;
+            background: var(--forest);
+            color: var(--cream);
+            border: none;
+            border-radius: 50px;
+            font-family: 'Syne', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: var(--forest-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 3rem;
+        }
+
+        /* Search Bar */
+        .search-section {
+            margin-bottom: 2rem;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 5000px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid rgba(19, 50, 21, 0.15);
+            border-radius: 50px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--sage);
+            box-shadow: 0 0 0 3px rgba(146, 183, 117, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--forest);
+            opacity: 0.5;
+            font-size: 1.2rem;
+        }
+
+        /* Banner */
+        .banner {
+            background: linear-gradient(135deg, var(--sage) 0%, var(--sage-light) 100%);
+            border-radius: 25px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 60%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            animation: float 15s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(20px, -20px) rotate(3deg); }
+        }
+
+        .banner-content {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+        }
+
+        .banner-tag {
+            display: inline-block;
+            background: var(--forest);
+            color: var(--cream);
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .banner h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 3rem;
+            color: var(--forest);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .banner p {
+            font-size: 1.3rem;
+            color: var(--forest);
+            opacity: 0.85;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .banner-btn {
+            padding: 1rem 2.5rem;
+            background: var(--forest);
+            color: var(--cream);
+            border: none;
+            border-radius: 50px;
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .banner-btn:hover {
+            background: var(--forest-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(19, 50, 21, 0.3);
+        }
+
+        .banner-image {
+            position: relative;
+            z-index: 1;
+        }
+
+        .banner-image img {
+            max-width: 400px;
+            border-radius: 20px;
+            filter: grayscale(100%) contrast(1.1);
+            opacity: 0.8;
+        }
+
+        /* Category Tabs */
+        .category-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .category-tabs::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .category-tabs::-webkit-scrollbar-thumb {
+            background: var(--sage);
+            border-radius: 4px;
+        }
+
+        .category-tab {
+            padding: 0.7rem 1.8rem;
+            background: white;
+            border: 2px solid rgba(19, 50, 21, 0.15);
+            border-radius: 50px;
+            font-family: 'Syne', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--forest);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .category-tab.active {
+            background: var(--forest);
+            color: var(--cream);
+            border-color: var(--forest);
+        }
+
+        .category-tab:hover {
+            border-color: var(--sage);
+            background: rgba(146, 183, 117, 0.1);
+        }
+
+        /* Product Grid */
+        .products-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            color: var(--forest);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--sage);
+            box-shadow: 0 15px 40px rgba(19, 50, 21, 0.15);
+        }
+
+        .product-image {
+            height: 240px;
+            background: linear-gradient(135deg, rgba(146, 183, 117, 0.1) 0%, rgba(146, 183, 117, 0.05) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.3rem;
+            color: var(--forest);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .product-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .product-tag {
+            font-size: 0.85rem;
+            color: var(--sage);
+            background: rgba(146, 183, 117, 0.15);
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .product-compatibility {
+            font-size: 0.95rem;
+            color: var(--forest);
+            opacity: 0.7;
+            margin-bottom: 1rem;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(19, 50, 21, 0.1);
+        }
+
+        .product-price {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            color: var(--forest);
+            font-weight: 700;
+        }
+
+        .add-to-setup-btn {
+            padding: 0.6rem 1.3rem;
+            background: var(--sage);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-to-setup-btn:hover {
+            background: var(--forest);
+            transform: translateY(-2px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(19, 50, 21, 0.7);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--cream);
+            border-radius: 30px;
+            max-width: 900px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .modal-close:hover {
+            background: var(--sage);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .product-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            padding: 3rem;
+        }
+
+        .product-detail-image {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-detail-image img {
+            max-width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+        }
+
+        .product-detail-info h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            color: var(--forest);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .product-detail-price {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            color: var(--sage);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .product-detail-tags {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .detail-tag {
+            padding: 0.6rem 1.2rem;
+            background: var(--sage);
+            color: white;
+            border-radius: 20px;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .product-description {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: var(--forest);
+            margin-bottom: 2rem;
+            opacity: 0.85;
+        }
+
+        .product-features {
+            margin-bottom: 2rem;
+        }
+
+        .product-features h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.3rem;
+            color: var(--forest);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .product-features ul {
+            list-style: none;
+        }
+
+        .product-features li {
+            padding: 0.6rem 0;
+            font-size: 1.1rem;
+            color: var(--forest);
+            opacity: 0.8;
+            display: flex;
+            align-items: start;
+            gap: 0.8rem;
+        }
+
+        .product-features li::before {
+            content: '✓';
+            color: var(--sage);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn-primary {
+            background: var(--forest);
+            color: var(--cream);
+        }
+
+        .modal-btn-primary:hover {
+            background: var(--forest-dark);
+            transform: translateY(-2px);
+        }
+
+        .modal-btn-secondary {
+            background: var(--sage);
+            color: white;
+        }
+
+        .modal-btn-secondary:hover {
+            background: var(--sage-light);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .product-detail {
+                grid-template-columns: 1fr;
+            }
+
+            .banner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .banner-image img {
+                max-width: 100%;
+                margin-top: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 1rem 1.5rem;
+            }
+
+            .main-content {
+                padding: 1.5rem;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .banner h2 {
+                font-size: 2rem;
+            }
+
+            .product-detail {
+                padding: 2rem 1.5rem;
+            }
+
+            .user-name {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="dashboard.html" class="logo">Tharavad AI</a>
+            <div class="user-info">
+                <div class="user-profile">
+                    <div class="user-avatar">GD</div>
+                    <span class="user-name">Gopika Pramod</span>
+                </div>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Search Bar -->
+        <div class="search-section">
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" placeholder="Search for smart devices..." id="searchInput" oninput="searchProducts()">
+            </div>
+        </div>
+
+        <!-- Banner -->
+        <div class="banner">
+            <div class="banner-content">
+                <div class="banner-tag">LIMITED TIME OFFER</div>
+                <h2>Save 30% on Smart Home Bundles</h2>
+                <p>Get expert consultation FREE when you purchase 3 or more devices. Build your perfect smart home ecosystem.</p>
+                <button class="banner-btn">Explore Bundles</button>
+            </div>
+            <div class="banner-image">
+                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&q=80" alt="Smart home bundle">
+            </div>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="category-tabs">
+            <button class="category-tab active" onclick="filterCategory('all')">All</button>
+            <button class="category-tab" onclick="filterCategory('lights')">Lights</button>
+            <button class="category-tab" onclick="filterCategory('security')">Security</button>
+            <button class="category-tab" onclick="filterCategory('climate')">Climate</button>
+            <button class="category-tab" onclick="filterCategory('assistants')">Assistants</button>
+            <button class="category-tab" onclick="filterCategory('appliances')">Appliances</button>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-section">
+            <h2 class="section-title">Smart Devices For You</h2>
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be dynamically loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <div class="product-detail" id="productDetail">
+                <!-- Product details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Product Data
+        const products = [
+            {
+                id: 1,
+                name: 'Philips Hue Bulb',
+                category: 'lights',
+                price: 1299,
+                tags: ['Energy Efficient', 'Alexa Compatible'],
+                compatibility: 'Alexa Compatible',
+                image: 'images/philips.webp',
+                description: 'Smart LED bulb with 16 million colors and wireless control. Create the perfect ambiance for any moment with voice control and app-based automation.',
+                features: [
+                    'Voice control with Alexa and Google Assistant',
+                    '16 million color options',
+                    'Energy-efficient LED technology',
+                    'Schedule lights to turn on/off automatically',
+                    'Long lifespan of 25,000 hours'
+                ]
+            },
+            {
+                id: 2,
+                name: 'Nest Thermostat',
+                category: 'climate',
+                price: 999,
+                tags: ['Energy Efficient', 'Alexa Compatible'],
+                compatibility: 'Alexa Compatible',
+                image: 'images/nest.jpg',
+                description: 'Smart thermostat that learns your schedule and automatically adjusts temperature for optimal comfort and energy savings.',
+                features: [
+                    'Auto-schedule learns your preferences',
+                    'Remote control from anywhere',
+                    'Energy history tracking',
+                    'Compatible with 95% of heating systems',
+                    'Saves an average of 10-12% on heating bills'
+                ]
+            },
+            {
+                id: 3,
+                name: 'Ecobee Smart Camera',
+                category: 'security',
+                price: 1299,
+                tags: ['Energy Efficient', 'Alexa Compatible'],
+                compatibility: 'Alexa Compatible',
+                image: 'images/ecobee.jpg',
+                description: 'Indoor security camera with 1080p video, night vision, and intelligent alerts to keep your home safe.',
+                features: [
+                    '1080p HD video quality',
+                    'Night vision capability',
+                    'Two-way audio communication',
+                    'Person detection alerts',
+                    'Free 30-day video history'
+                ]
+            },
+            {
+                id: 4,
+                name: 'Amazon Echo',
+                category: 'assistants',
+                price: 4499,
+                tags: ['Energy Efficient', 'Alexa Compatible'],
+                compatibility: 'Alexa Compatible',
+                image: 'images/amazon echo.webp',
+                description: 'Smart speaker with premium sound and Alexa built-in. Control your smart home, play music, and get answers hands-free.',
+                features: [
+                    'Premium audio with rich bass',
+                    'Built-in Alexa voice assistant',
+                    'Smart home hub capabilities',
+                    'Multi-room audio support',
+                    'Voice control for thousands of devices'
+                ]
+            },
+            {
+                id: 5,
+                name: 'Google Nest Hub',
+                category: 'assistants',
+                price: 7299,
+                tags: ['Energy Efficient', 'Alexa Compatible'],
+                compatibility: 'Alexa Compatible',
+                image: 'images/amazon nest.jpg',
+                description: 'Smart display with Google Assistant. Watch videos, view photos, control smart home, and manage your day with voice commands.',
+                features: [
+                    '7-inch touchscreen display',
+                    'Google Assistant built-in',
+                    'Voice Match recognizes your voice',
+                    'Stream from YouTube, Netflix & more',
+                    'Control compatible smart home devices'
+                ]
+            },
+            {
+                id: 6,
+                name: 'Ring Video Doorbell',
+                category: 'security',
+                price: 8499,
+                tags: ['Energy Efficient', 'Alexa Compatible'],
+                compatibility: 'Alexa Compatible',
+                image: 'images/ring.jpg',
+                description: 'See, hear and speak to visitors from anywhere with 1080p HD video and advanced motion detection.',
+                features: [
+                    '1080p HD video doorbell',
+                    'Advanced motion detection',
+                    'Two-way talk and audio',
+                    'Night vision',
+                    'Works with Alexa for announcements'
+                ]
+            },
+            {
+                id: 7,
+                name: 'Yale Smart Lock',
+                category: 'security',
+                price: 12999,
+                tags: ['Secure', 'Alexa Compatible'],
+                compatibility: 'Alexa Compatible',
+                image: 'images/yale.jpg',
+                description: 'Keyless smart lock with touchscreen. Lock and unlock from anywhere, create guest codes, and get alerts.',
+                features: [
+                    'Touchscreen keyless entry',
+                    'Create up to 25 unique PIN codes',
+                    'Remote lock/unlock capability',
+                    'Auto-lock feature',
+                    'Tamper-proof cover and alarm'
+                ]
+            },
+            {
+                id: 8,
+                name: 'TP-Link Smart Plug',
+                category: 'appliances',
+                price: 799,
+                tags: ['Energy Monitor', 'Alexa Compatible'],
+                compatibility: 'Alexa Compatible',
+                image: 'images/plug.jpg',
+                description: 'Control devices from anywhere, set schedules, and monitor energy consumption with this compact smart plug.',
+                features: [
+                    'Control devices remotely',
+                    'Voice control with Alexa/Google',
+                    'Schedule devices to turn on/off',
+                    'Monitor energy consumption',
+                    'Compact design'
+                ]
+            },
+            {
+                id: 9,
+                name: 'Sengled Smart Bulb',
+                category: 'lights',
+                price: 899,
+                tags: ['Energy Efficient', 'Color Changing'],
+                compatibility: 'Alexa & Google Compatible',
+                image: 'images/sengled.jpg',
+                description: 'Affordable smart bulb with RGB colors and tunable white light. No hub required.',
+                features: [
+                    'RGB + tunable white light',
+                    'No hub required (WiFi)',
+                    'Voice control compatible',
+                    'Group control multiple bulbs',
+                    'Energy efficient LED'
+                ]
+            },
+            {
+                id: 10,
+                name: 'August Smart Lock',
+                category: 'security',
+                price: 15999,
+                tags: ['Premium', 'Auto-Lock'],
+                compatibility: 'Alexa, Google, HomeKit',
+                image: 'images/august.jpg',
+                description: 'Premium smart lock with auto-unlock. Installs on your existing deadbolt in minutes.',
+                features: [
+                    'Auto-unlock when you arrive',
+                    'DoorSense technology',
+                    'Works with existing keys',
+                    'Remote access from anywhere',
+                    'Activity feed of lock/unlock events'
+                ]
+            },
+            {
+                id: 11,
+                name: 'Wyze Cam',
+                category: 'security',
+                price: 2499,
+                tags: ['Budget-Friendly', '1080p'],
+                compatibility: 'Alexa & Google Compatible',
+                image: 'images/wyze.jpg',
+                description: 'Affordable 1080p indoor wireless smart security camera with night vision and 2-way audio.',
+                features: [
+                    '1080p Full HD video',
+                    'Free 14-day cloud storage',
+                    'Motion & sound detection',
+                    'Night vision up to 30ft',
+                    'Works with Alexa & Google'
+                ]
+            },
+            {
+                id: 12,
+                name: 'Honeywell Thermostat',
+                category: 'climate',
+                price: 8999,
+                tags: ['Programmable', 'Touchscreen'],
+                compatibility: 'Alexa & Google Compatible',
+                image: 'images/honeywell.jpg',
+                description: 'WiFi-enabled programmable thermostat with large touchscreen and flexible scheduling.',
+                features: [
+                    'Large color touchscreen',
+                    '7-day flexible scheduling',
+                    'Geofencing capabilities',
+                    'Energy usage reports',
+                    'Smart alerts and reminders'
+                ]
+            }
+        ];
+
+        // Load products on page load
+        let currentCategory = 'all';
+        
+        function loadProducts() {
+            const grid = document.getElementById('productsGrid');
+            const filteredProducts = currentCategory === 'all' 
+                ? products 
+                : products.filter(p => p.category === currentCategory);
+            
+            grid.innerHTML = filteredProducts.map(product => `
+                <div class="product-card" onclick="openProductDetail(${product.id})">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">${product.name}</h3>
+                        <div class="product-tags">
+                            ${product.tags.map(tag => `<span class="product-tag">${tag}</span>`).join('')}
+                        </div>
+                        <p class="product-compatibility">${product.compatibility}</p>
+                        <div class="product-footer">
+                            <span class="product-price">₹${product.price}</span>
+                            <button class="add-to-setup-btn" onclick="event.stopPropagation(); addToSetup(${product.id})">Add to Setup</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterCategory(category) {
+            currentCategory = category;
+            
+            // Update active tab
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            loadProducts();
+        }
+
+        function searchProducts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const grid = document.getElementById('productsGrid');
+            
+            const filteredProducts = products.filter(p => 
+                p.name.toLowerCase().includes(searchTerm) ||
+                p.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
+                p.category.toLowerCase().includes(searchTerm)
+            );
+            
+            grid.innerHTML = filteredProducts.map(product => `
+                <div class="product-card" onclick="openProductDetail(${product.id})">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">${product.name}</h3>
+                        <div class="product-tags">
+                            ${product.tags.map(tag => `<span class="product-tag">${tag}</span>`).join('')}
+                        </div>
+                        <p class="product-compatibility">${product.compatibility}</p>
+                        <div class="product-footer">
+                            <span class="product-price">₹${product.price}</span>
+                            <button class="add-to-setup-btn" onclick="event.stopPropagation(); addToSetup(${product.id})">Add to Setup</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openProductDetail(productId) {
+            const product = products.find(p => p.id === productId);
+            const modal = document.getElementById('productModal');
+            const detailContainer = document.getElementById('productDetail');
+            
+            detailContainer.innerHTML = `
+                <div class="product-detail-image">
+                    <img src="${product.image}" alt="${product.name}">
+                </div>
+                <div class="product-detail-info">
+                    <h2>${product.name}</h2>
+                    <div class="product-detail-price">₹${product.price}</div>
+                    <div class="product-detail-tags">
+                        ${product.tags.map(tag => `<span class="detail-tag">${tag}</span>`).join('')}
+                    </div>
+                    <p class="product-description">${product.description}</p>
+                    <div class="product-features">
+                        <h3>Key Features</h3>
+                        <ul>
+                            ${product.features.map(feature => `<li>${feature}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="modal-btn modal-btn-primary" onclick="addToSetup(${product.id}); closeModal();">Add to My Setup</button>
+                        <button class="modal-btn modal-btn-secondary" onclick="bookConsultation()">Book Consultation</button>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').classList.remove('active');
+        }
+
+        function addToSetup(productId) {
+            const product = products.find(p => p.id === productId);
+            alert(`${product.name} added to your setup! 🎉`);
+        }
+
+        function bookConsultation() {
+            alert('Redirecting to consultation booking...');
+            // In a real app, this would navigate to the booking page
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('productModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Load products on page load
+        loadProducts();
+    </script>
+</body>
+</html>
